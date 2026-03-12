@@ -18,7 +18,7 @@ interface EventFeedProps {
 
 const EventFeed: React.FC<EventFeedProps> = ({ events, onRemoveEvent }) => {
   // Display only the most recent 10 events
-  const recentEvents = events.slice(-10);
+  const recentEvents = events.slice(0, 10);
   
   return (
     <div className="space-y-1 mb-4 max-h-[300px] overflow-y-auto custom-scrollbar">

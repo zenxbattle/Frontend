@@ -45,6 +45,12 @@ const ChallengeList: React.FC<ChallengeListProps> = ({
   copyRoomUrl,
   navigate,
 }) => {
+  const navigateToResults = (challenge: any) => {
+    navigate(`/challenge-results/${challenge.challengeId}`, {
+      state: { challenge },
+    });
+  };
+
   const renderChallengeSection = (tab: string, title: string, challenges: any, isLoading: boolean, icon: JSX.Element, color: string, buttonProps: (challenge: any) => JSX.Element) => (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -208,7 +214,7 @@ const ChallengeList: React.FC<ChallengeListProps> = ({
                   className="bg-blue-600 hover:bg-blue-700 text-white rounded-md"
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/challenge-results/${challenge.challengeId}`);
+                    navigateToResults(challenge);
                   }}
                   aria-label={`View results for ${challenge.title || "challenge"}`}
                 >
@@ -232,7 +238,7 @@ const ChallengeList: React.FC<ChallengeListProps> = ({
                   className="bg-yellow-600 hover:bg-yellow-700 text-white rounded-md"
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/challenge-results/${challenge.challengeId}`);
+                    navigateToResults(challenge);
                   }}
                   aria-label={`View results for ${challenge.title || "challenge"}`}
                 >
@@ -283,7 +289,7 @@ const ChallengeList: React.FC<ChallengeListProps> = ({
                 className="bg-blue-600 hover:bg-blue-700 text-white rounded-md"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate(`/challenge-results/${challenge.challengeId}`);
+                  navigateToResults(challenge);
                 }}
                 aria-label={`View results for ${challenge.title || "challenge"}`}
               >
@@ -306,7 +312,7 @@ const ChallengeList: React.FC<ChallengeListProps> = ({
                 className="bg-yellow-600 hover:bg-yellow-700 text-white rounded-md"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate(`/challenge-results/${challenge.challengeId}`);
+                  navigateToResults(challenge);
                 }}
                 aria-label={`View results for ${challenge.title || "challenge"}`}
               >

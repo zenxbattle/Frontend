@@ -19,8 +19,8 @@ export const createChallenge = async (data: {
       title: data.title,
       processedProblemIds: data.processedProblemIds,
       isPrivate: data.isPrivate,
-      timeLimit: data.timeLimit,
-      startTime: data.startTime,
+      timeLimitMillis: data.timeLimit ? data.timeLimit * 1000 : undefined,
+      startTimeUnix: data.startTime,
       config: data.config,
       password: data.password,
     }, {
@@ -50,6 +50,18 @@ export const getUserChallengeHistory = async (data: {
     return response.data.payload;
   } catch (error) {
     console.error('Error fetching user challenge history:', error);
+    throw error;
+  }
+};
+
+export const getChallengeById = async (challengeId: string) => {
+  try {
+    const response = await axiosInstance.get(`/challenges/${challengeId}`, {
+      headers: { 'X-Requires-Auth': 'true' }
+    });
+    return response.data.payload?.challenge as ChallengeDocument;
+  } catch (error) {
+    console.error('Error fetching challenge by id:', error);
     throw error;
   }
 };

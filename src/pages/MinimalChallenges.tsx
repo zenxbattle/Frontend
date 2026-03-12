@@ -113,7 +113,7 @@ const MinimalChallenges = () => {
       return;
     }
     const roomUrl =
-      window.location.host +
+      window.location.origin +
       "/join-challenge/" +
       challenge.challengeId +
       (challenge.password ? "/" + challenge.password : "");

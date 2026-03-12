@@ -46,8 +46,8 @@ interface SelectedProblem {
 }
 
 const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Challenge title must be at least 2 characters.",
+  title: z.string().min(3, {
+    message: "Challenge title must be at least 3 characters.",
   }),
   difficulty: z.enum(["Easy", "Medium", "Hard"]).default("Easy"),
   isPrivate: z.boolean().default(false),
@@ -203,7 +203,7 @@ const CreateChallenge: React.FC = () => {
   };
 
   const canAdvanceToProblems = () => {
-    return form.getValues().title.length >= 2;
+    return form.getValues().title.length >= 3;
   };
 
   const validateProblemSelection = (useRandom: boolean) => {
@@ -270,13 +270,15 @@ const CreateChallenge: React.FC = () => {
         config: { ...config } as ChallengeConfig,
       });
 
-      queryClient.invalidateQueries({ queryKey: ['challenges'] });
-      queryClient.invalidateQueries({ queryKey: ['user-challenge-history'] });
+      queryClient.invalidateQueries({ queryKey: ['active-open-challenges'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['owners-active-challenges'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['user-challenge-public-history'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['user-challenge-private-history'], exact: false });
 
-      toast.success(`Challenge "${formData.title}" created! Redirecting to challenges...`);
+      toast.success(`Challenge "${formData.title}" created! Opening room...`);
       setTimeout(() => {
-        navigate(`/challenges`);
-      }, 1500);
+        navigate(`/join-challenge/${newChallenge.challengeId}${newChallenge.password ? `/${newChallenge.password}` : ""}`);
+      }, 600);
     } catch (error) {
       console.error("Failed to create challenge:", error);
       toast.error("Failed to create challenge");

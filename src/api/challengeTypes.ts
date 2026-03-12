@@ -1,25 +1,26 @@
-// types/challenge.ts
-
 export type Submission = {
   submissionId: string;
-  timeTaken: number; // milliseconds
-  score: number;
+  timeTaken: number;
+  points?: number;
+  score?: number;
   userCode: string;
 };
 
 export type ChallengeProblemMetadata = {
   problemId: string;
   score: number;
-  timeTaken: number; // milliseconds
-  completedAt: number; // unix timestamp
+  timeTaken: number;
+  completedAt: number;
 };
 
 export type ParticipantMetadata = {
   problemsDone: Record<string, ChallengeProblemMetadata>;
   problemsAttempted: number;
   totalScore: number;
-  joinTime: number; // unix timestamp
-  lastConnected: number; // unix timestamp
+  joinTime: number;
+  lastConnected: number;
+  initialJoinIp?: string;
+  status?: string;
 };
 
 export type LeaderboardEntry = {
@@ -36,19 +37,27 @@ export type ChallengeConfig = {
   maxHardQuestions: number;
 };
 
+export type ChallengeStatus =
+  | "CHALLENGEOPEN"
+  | "CHALLENGESTARTED"
+  | "CHALLENGEFORFIETED"
+  | "CHALLENGEENDED"
+  | "CHALLENGEABANDON";
+
 export type ChallengeDocument = {
   challengeId: string;
   creatorId: string;
+  createdAt?: number;
   title: string;
   isPrivate: boolean;
-  password: string;
-  status: "pending" | "active" | "completed"; 
-  timeLimit: number; 
-  startTime: number; 
+  password?: string;
+  status: ChallengeStatus | string;
+  timeLimit: number;
+  startTime: number;
   participants: Record<string, ParticipantMetadata>;
   submissions: Record<string, Record<string, Submission>>;
   leaderboard: LeaderboardEntry[];
-  config: ChallengeConfig;
+  config?: ChallengeConfig;
   processedProblemIds: string[];
+  problemCount?: number;
 };
-

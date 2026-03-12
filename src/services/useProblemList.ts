@@ -100,7 +100,10 @@ export const fetchBulkProblemMetadata = async (problemIds: string[]): Promise<an
     const url = `${BASE_URL}/bulk/metadata?${queryString}`;
 
     const res = await axios.get(url);
-    const problemList = res.data.payload?.BulkProblemMetadata || [];
+    const problemList =
+      res.data.payload?.bulkProblemMetadata ||
+      res.data.payload?.BulkProblemMetadata ||
+      [];
 
     if (!Array.isArray(problemList)) throw new Error("Expected an array of problems");
 
@@ -118,4 +121,3 @@ export const fetchBulkProblemMetadata = async (problemIds: string[]): Promise<an
     return [];
   }
 };
-

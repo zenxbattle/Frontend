@@ -76,6 +76,15 @@ export const useActiveOpenChallenges = ({
   });
 };
 
+export const useChallengeById = (challengeId?: string) => {
+  return useQuery({
+    queryKey: ['challenge-by-id', challengeId],
+    queryFn: () => challengeApi.getChallengeById(challengeId as string),
+    staleTime: HISTORY_STALE_TIME,
+    enabled: !!challengeId,
+  });
+};
+
 export const useGetOwnersActiveChallenges = ({
   page = 1,
   pageSize = 10,

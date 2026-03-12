@@ -28,6 +28,7 @@ import AdminDashboard from "./pages-admin/AdminDashboard";
 import MinimalChallenges from "./pages/MinimalChallenges";
 import CreateChallenge from "./components/challenges/CreateChallengeForm";
 import JoinChallenge from "./pages/Challenge/JoinChallenge";
+import ChallengeResults from "./pages/Challenge/ChallengeResults";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,6 +63,7 @@ const AppContent = () => {
         <Route path="/challenges" element={<MinimalChallenges />} />
         <Route path="/join-challenge/:challengeid/:password" element={<JoinChallenge />} />
         <Route path="/join-challenge/:challengeid" element={<JoinChallenge />} />
+        <Route path="/challenge-results/:challengeId" element={<ChallengeResults />} />
 
         <Route path="create-challenges" element={<CreateChallenge />} />
         <Route path="/settings" element={<Settings />} />
