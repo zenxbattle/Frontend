@@ -63,7 +63,7 @@ function SignupForm({
   }, [error]);
 
   const onSubmit = (data: Stage1FormData) => {
-    Cookies.set('emailtobeverified', data.email, { expires: 7, secure: true, sameSite: 'Strict' });
+    Cookies.set('emailtobeverified', data.email, { expires: 7, secure: window.location.protocol === 'https:', sameSite: 'Strict' });
     setFormData(data);
     onNext();
   };

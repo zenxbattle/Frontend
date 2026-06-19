@@ -145,10 +145,10 @@ export const loginUser = (credentials: { email?: string; password?: string; code
     // Set cookies for accessToken and refreshToken
     Cookies.set("accessToken", data.accessToken, {
       expires: data.expiresIn / (24 * 60 * 60),
-      secure: true,
+      secure: window.location.protocol === 'https:',
       sameSite: "Strict",
     });
-    Cookies.set("refreshToken", data.refreshToken, { expires: 7, secure: true, sameSite: "Strict" });
+    Cookies.set("refreshToken", data.refreshToken, { expires: 7, secure: window.location.protocol === 'https:', sameSite: "Strict" });
 
     // Dispatch login success
     setTimeout(() => {

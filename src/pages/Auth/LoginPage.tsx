@@ -186,13 +186,13 @@ function LoginForm() {
 
       Cookies.set('accessToken', accessToken, {
         expires: 1,
-        secure: true,
+        secure: window.location.protocol === 'https:',
         sameSite: 'Strict',
       });
 
       Cookies.set('refreshToken', refreshToken, {
         expires: 7,
-        secure: true,
+        secure: window.location.protocol === 'https:',
         sameSite: 'Strict',
       });
 

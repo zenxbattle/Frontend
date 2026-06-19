@@ -71,7 +71,7 @@ const refreshAccessToken = async () => {
 
     Cookies.set('accessToken', accessToken, {
       expires: expiresIn / (24 * 60 * 60),
-      secure: true,
+      secure: window.location.protocol === 'https:',
       sameSite: 'Strict',
     });
 

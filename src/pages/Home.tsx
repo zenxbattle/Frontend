@@ -15,8 +15,14 @@ const Home = () => {
     // if tokens are present in the query parameters, store them in cookies
     if (accessToken && refreshToken) {
       Cookies.set('accessToken', accessToken, {
-        expires: 1, // expires in 1 day
-        secure: true,
+        expires: 1,
+        secure: window.location.protocol === 'https:',
+        sameSite: 'Strict',
+      });
+
+      Cookies.set('refreshToken', refreshToken, {
+        expires: 7,
+        secure: window.location.protocol === 'https:',
         sameSite: 'Strict',
       });
 
