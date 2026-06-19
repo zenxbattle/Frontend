@@ -7,7 +7,7 @@ import authReducer from './slices/authSlice';
 export const store = configureStore({
   reducer: {
     leaderboard: leaderboardReducer,
-    xCodeCompiler: compilerReducer,
+    zenxbattle: compilerReducer,
     auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>

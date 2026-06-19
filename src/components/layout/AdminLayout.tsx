@@ -1,12 +1,11 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { isAdminAuthenticated, adminLogout } from "@/utils/authUtils";
-import Cookies from "js-cookie";
 import {
   LayoutDashboard,
   Users,
-  Settings,
+  FileCode,
   LogOut,
   Menu,
   X
@@ -21,15 +20,14 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    // Check if user is authenticated as admin
     if (!isAdminAuthenticated()) {
       navigate("/admin/login");
       return;
     }
 
-    // Check for mobile view
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
       if (window.innerWidth < 768) {
@@ -49,11 +47,18 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     navigate("/admin/login");
   };
 
+  const isActive = (path: string) => location.pathname === path;
+
   const menuItems = [
     {
       name: "Dashboard",
       path: "/admin/dashboard",
       icon: <LayoutDashboard className="h-5 w-5" />
+    },
+    {
+      name: "Problems",
+      path: "/admin/dashboard",
+      icon: <FileCode className="h-5 w-5" />
     },
     {
       name: "Users",
@@ -84,17 +89,24 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
 
         <div className="flex flex-col flex-1 mt-10">
           <nav className="flex-1 space-y-1">
-            {menuItems.map((item) => (
-              <Button
-                key={item.name}
-                variant="ghost"
-                className="w-full justify-start gap-3 px-3 py-6 text-left text-base hover:bg-zinc-800"
-                onClick={() => navigate(item.path)}
-              >
-                {item.icon}
-                {item.name}
-              </Button>
-            ))}
+            {menuItems.map((item) => {
+              const active = isActive(item.path);
+              return (
+                <Button
+                  key={item.name}
+                  variant="ghost"
+                  className={`w-full justify-start gap-3 px-3 py-6 text-left text-base ${
+                    active
+                      ? "bg-zinc-800 text-white"
+                      : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                  }`}
+                  onClick={() => navigate(item.path)}
+                >
+                  {item.icon}
+                  {item.name}
+                </Button>
+              );
+            })}
           </nav>
 
           <Button

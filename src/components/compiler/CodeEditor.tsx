@@ -24,7 +24,7 @@ const CodeEditor = ({ className, isMobile }: CodeEditorProps) => {
 
   // Get state from Redux store
   const { code, language, files, currentFile } = useSelector((state: RootState) =>
-    state.xCodeCompiler ? state.xCodeCompiler : { code: '', language: 'javascript', files: [], currentFile: null }
+    state.zenxbattle ? state.zenxbattle : { code: '', language: 'javascript', files: [], currentFile: null }
   );
 
   const [fontSize, setFontSize] = useState(14);
@@ -44,7 +44,7 @@ const CodeEditor = ({ className, isMobile }: CodeEditorProps) => {
 
   const handleCodeChange = (value: string | undefined) => {
     if (dispatch) {
-      dispatch({ type: 'xCodeCompiler/setCode', payload: value || '' });
+      dispatch({ type: 'zenxbattle/setCode', payload: value || '' });
     }
   };
 

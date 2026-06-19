@@ -64,6 +64,13 @@ export default function AdminDashboard() {
   const [view, setView] = useState<"list" | "details" | "testcases" | "languages" | "validation" | "api">("list")
   const [showFilters, setShowFilters] = useState(false)
 
+  const totalProblems = problems.length;
+  const validatedCount = problems.filter((p) => p.validated).length;
+  const visibleCount = problems.filter((p) => p.visible).length;
+  const easyCount = problems.filter((p) => p.difficulty === "E" || p.difficulty === "Easy" || p.difficulty === "1").length;
+  const mediumCount = problems.filter((p) => p.difficulty === "M" || p.difficulty === "Medium" || p.difficulty === "2").length;
+  const hardCount = problems.filter((p) => p.difficulty === "H" || p.difficulty === "Hard" || p.difficulty === "3").length;
+
   const fetchProblems = useCallback(async () => {
     setLoading(true)
     setError(null)
@@ -197,7 +204,8 @@ export default function AdminDashboard() {
   const applyFilters = useCallback(() => {
     let filtered = [...problems];
     if (filters.search) {
-      filtered = filtered.filter((p) => p.title.toLowerCase().includes(filters.search.toLowerCase()));
+      const q = filters.search.toLowerCase();
+      filtered = filtered.filter((p) => p.title.toLowerCase().includes(q) || (p.slug && p.slug.toLowerCase().includes(q)));
     }
     if (filters.difficulty !== "all") {
       filtered = filtered.filter((p) => mapDifficulty(p.difficulty) === filters.difficulty);
@@ -216,7 +224,35 @@ export default function AdminDashboard() {
   return (
     <div className="flex-1 overflow-auto p-6 bg-white dark:bg-[#0F0F12] min-h-screen">
       <div className="space-y-6">
-        {view === "list" && <ProblemListView
+        {view === "list" && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              <div className="rounded-lg border border-zinc-200 dark:border-[#1F1F23] bg-white dark:bg-[#0F0F12] p-3">
+                <p className="text-xs text-zinc-500 dark:text-zinc-500 font-medium uppercase tracking-wide">total</p>
+                <p className="text-2xl font-bold text-zinc-900 dark:text-white mt-1">{totalProblems}</p>
+              </div>
+              <div className="rounded-lg border border-emerald-200 dark:border-emerald-900/30 bg-emerald-50/50 dark:bg-emerald-950/10 p-3">
+                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium uppercase tracking-wide">validated</p>
+                <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mt-1">{validatedCount}</p>
+              </div>
+              <div className="rounded-lg border border-zinc-200 dark:border-[#1F1F23] bg-white dark:bg-[#0F0F12] p-3">
+                <p className="text-xs text-zinc-500 dark:text-zinc-500 font-medium uppercase tracking-wide">visible</p>
+                <p className="text-2xl font-bold text-zinc-900 dark:text-white mt-1">{visibleCount}</p>
+              </div>
+              <div className="rounded-lg border border-emerald-200 dark:border-emerald-900/30 bg-emerald-50/50 dark:bg-emerald-950/10 p-3">
+                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium uppercase tracking-wide">easy</p>
+                <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mt-1">{easyCount}</p>
+              </div>
+              <div className="rounded-lg border border-yellow-200 dark:border-yellow-900/30 bg-yellow-50/50 dark:bg-yellow-950/10 p-3">
+                <p className="text-xs text-yellow-600 dark:text-yellow-400 font-medium uppercase tracking-wide">medium</p>
+                <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300 mt-1">{mediumCount}</p>
+              </div>
+              <div className="rounded-lg border border-red-200 dark:border-red-900/30 bg-red-50/50 dark:bg-red-950/10 p-3">
+                <p className="text-xs text-red-600 dark:text-red-400 font-medium uppercase tracking-wide">hard</p>
+                <p className="text-2xl font-bold text-red-700 dark:text-red-300 mt-1">{hardCount}</p>
+              </div>
+            </div>
+            <ProblemListView
           setFilters={setFilters}
           filters={filters}
           setShowFilters={setShowFilters}
@@ -227,7 +263,9 @@ export default function AdminDashboard() {
           getDifficultyColor={getDifficultyColor}
           fetchProblemDetails={fetchProblemDetails}
           setView={setView}
-        />}
+        />
+          </div>
+        )}
         {view === "details" && <ProblemDetailsView
           selectedProblem={selectedProblem}
           setView={setView}

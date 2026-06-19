@@ -81,7 +81,7 @@ const CompilerPlayground = () => {
 
   // Get state from Redux store
   const { language, files, currentFile } = useSelector((state: RootState) =>
-    state.xCodeCompiler ? state.xCodeCompiler : { language: 'javascript', files: [], currentFile: null }
+    state.zenxbattle ? state.zenxbattle : { language: 'javascript', files: [], currentFile: null }
   );
 
   // Handle mobile vs desktop view
@@ -106,8 +106,8 @@ const CompilerPlayground = () => {
   const handleSetLanguage = (lang: string, fileExtension: string) => {
     if (dispatch) {
       // Here we assume you have these actions in your Redux setup
-      dispatch({ type: 'xCodeCompiler/setLanguage', payload: lang });
-      dispatch({ type: 'xCodeCompiler/setFile', payload: fileExtension });
+      dispatch({ type: 'zenxbattle/setLanguage', payload: lang });
+      dispatch({ type: 'zenxbattle/setFile', payload: fileExtension });
     }
   };
 

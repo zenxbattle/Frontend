@@ -19,7 +19,7 @@ const initialState: CompilerState = {
 };
 
 export const runCode = createAsyncThunk(
-  'xCodeCompiler/runCode',
+  'zenxbattle/runCode',
   async ({ code, reqLang }: { code: string; reqLang: string }, { rejectWithValue }) => {
     try {
       const result = await executeCode(code, reqLang);
@@ -36,7 +36,7 @@ export const runCode = createAsyncThunk(
 );
 
 export const compilerSlice = createSlice({
-  name: 'xCodeCompiler',
+  name: 'zenxbattle',
   initialState,
   reducers: {
     setCode: (state, action: PayloadAction<string>) => {
@@ -47,7 +47,7 @@ export const compilerSlice = createSlice({
             ? { ...file, content: action.payload, lastModified: new Date().toISOString() }
             : file
         );
-        localStorage.setItem('xcode-files', JSON.stringify(state.files));
+        localStorage.setItem('zenxbattle-files', JSON.stringify(state.files));
       }
     },
 
@@ -59,7 +59,7 @@ export const compilerSlice = createSlice({
             ? { ...file, language: action.payload, lastModified: new Date().toISOString() }
             : file
         );
-        localStorage.setItem('xcode-files', JSON.stringify(state.files));
+        localStorage.setItem('zenxbattle-files', JSON.stringify(state.files));
       }
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -72,7 +72,7 @@ export const compilerSlice = createSlice({
 
     setFiles: (state, action: PayloadAction<File[]>) => {
       state.files = action.payload;
-      localStorage.setItem('xcode-files', JSON.stringify(state.files));
+      localStorage.setItem('zenxbattle-files', JSON.stringify(state.files));
     },
 
     setCurrentFile: (state, action: PayloadAction<string | null>) => {
@@ -94,7 +94,7 @@ export const compilerSlice = createSlice({
             ? { ...file, name: file.name.replace(/\.[^.]+$/, `.${action.payload}`), lastModified: new Date().toISOString() }
             : file
         );
-        localStorage.setItem('xcode-files', JSON.stringify(state.files));
+        localStorage.setItem('zenxbattle-files', JSON.stringify(state.files));
       }
     },
 
@@ -121,7 +121,7 @@ export const compilerSlice = createSlice({
           ? { ...file, content: code, lastModified: new Date().toISOString() }
           : file
       );
-      localStorage.setItem('xcode-files', JSON.stringify(state.files));
+      localStorage.setItem('zenxbattle-files', JSON.stringify(state.files));
     },
   },
   extraReducers: (builder) => {

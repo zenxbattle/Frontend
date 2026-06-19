@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -7,12 +7,15 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronLeft, Loader2, Trash2 } from "lucide-react";
+import { ChevronLeft, Loader2, Trash2, RefreshCw } from "lucide-react";
 import MDEditor from '@uiw/react-md-editor';
 
-// Schema definition
+const toSlug = (s: string) =>
+  s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
 const problemSchema = z.object({
   title: z.string().min(1, "Title is required"),
+  slug: z.string().min(1, "Slug is required").regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Slug must be lowercase with hyphens"),
   description: z.string().min(1, "Description is required"),
   tags: z.array(z.string()).min(1, "At least one tag is required"),
   difficulty: z.string().min(1, "Difficulty is required"),
@@ -25,6 +28,7 @@ type ProblemFormData = z.infer<typeof problemSchema>;
 interface Problem {
   problemId: string | number;
   title: string;
+  slug: string;
   description: string;
   tags: string[];
   difficulty: string;
@@ -172,37 +176,49 @@ const ProblemDetailsView: React.FC<ProblemDetailsProps> = ({
     handleSubmit,
     reset,
     control,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ProblemFormData>({
     resolver: zodResolver(problemSchema),
     defaultValues: selectedProblem
       ? {
         title: selectedProblem.title,
+        slug: selectedProblem.slug || "",
         description: selectedProblem.description,
         tags: selectedProblem.tags || [],
         difficulty: mapDifficulty(selectedProblem.difficulty),
         visible: selectedProblem.visible ?? false,
       }
-      : { title: "", description: "", tags: [], difficulty: "", visible: false },
+      : { title: "", slug: "", description: "", tags: [], difficulty: "", visible: false },
   });
+
+  const titleValue = watch("title");
+  useEffect(() => {
+    if (!selectedProblem && titleValue) {
+      setValue("slug", toSlug(titleValue));
+    }
+  }, [titleValue, selectedProblem, setValue]);
 
   useEffect(() => {
     if (selectedProblem) {
       reset({
         title: selectedProblem.title,
+        slug: selectedProblem.slug || "",
         description: selectedProblem.description,
         tags: selectedProblem.tags || [],
         difficulty: mapDifficulty(selectedProblem.difficulty),
         visible: selectedProblem.visible ?? false,
       });
     } else {
-      reset({ title: "", description: "", tags: [], difficulty: "", visible: false });
+      reset({ title: "", slug: "", description: "", tags: [], difficulty: "", visible: false });
     }
   }, [selectedProblem, reset]);
 
   const onSubmit = async (data: ProblemFormData) => {
     const payload = {
       title: data.title,
+      slug: data.slug,
       description: data.description,
       tags: data.tags,
       difficulty: data.difficulty.charAt(0),
@@ -264,6 +280,24 @@ const ProblemDetailsView: React.FC<ProblemDetailsProps> = ({
                 />
                 {errors.title && (
                   <p className="text-sm text-red-600 dark:text-red-400 mt-1">{errors.title.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="slug" className="text-gray-700 dark:text-gray-300">
+                  Slug
+                </label>
+                <Input
+                  id="slug"
+                  {...register("slug")}
+                  placeholder="two-sum"
+                  className="mt-1 border-gray-200 dark:border-[#1F1F23] dark:bg-[#0F0F12] text-gray-900 dark:text-gray-100 font-mono text-sm"
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                  auto-generated from title on new problems
+                </p>
+                {errors.slug && (
+                  <p className="text-sm text-red-600 dark:text-red-400 mt-1">{errors.slug.message}</p>
                 )}
               </div>
 

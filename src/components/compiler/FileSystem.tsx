@@ -26,7 +26,7 @@ import { File } from './CompilerPlayground';
 const FileSystem: React.FC = () => {
   const dispatch = useDispatch();
   const { language, file, files, currentFile } = useSelector((state: RootState) =>
-    state.xCodeCompiler ? state.xCodeCompiler : { language: 'javascript', file: 'js', files: [], currentFile: null }
+    state.zenxbattle ? state.zenxbattle : { language: 'javascript', file: 'js', files: [], currentFile: null }
   );
 
   const [isRenaming, setIsRenaming] = useState(false);
@@ -37,18 +37,18 @@ const FileSystem: React.FC = () => {
   useEffect(() => {
     const loadFilesFromLocalStorage = () => {
       try {
-        const storedFiles = localStorage.getItem('xcode-files');
+        const storedFiles = localStorage.getItem('zenxbattle-files');
         if (storedFiles && dispatch) {
           const parsedFiles: File[] = JSON.parse(storedFiles);
           if (Array.isArray(parsedFiles)) {
-            dispatch({ type: 'xCodeCompiler/setFiles', payload: parsedFiles });
+            dispatch({ type: 'zenxbattle/setFiles', payload: parsedFiles });
             if (parsedFiles.length > 0 && currentFile === null) {
               const sortedFiles = [...parsedFiles].sort(
                 (a, b) =>
                   new Date(b.lastModified).getTime() -
                   new Date(a.lastModified).getTime()
               );
-              dispatch({ type: 'xCodeCompiler/setCurrentFile', payload: sortedFiles[0].id });
+              dispatch({ type: 'zenxbattle/setCurrentFile', payload: sortedFiles[0].id });
             }
           }
         }
@@ -89,8 +89,8 @@ const FileSystem: React.FC = () => {
       lastModified: new Date().toISOString(),
     };
 
-    dispatch({ type: 'xCodeCompiler/setFiles', payload: [...files, newFile] });
-    dispatch({ type: 'xCodeCompiler/setCurrentFile', payload: newId });
+    dispatch({ type: 'zenxbattle/setFiles', payload: [...files, newFile] });
+    dispatch({ type: 'zenxbattle/setCurrentFile', payload: newId });
   };
 
   // Delete a file
@@ -98,13 +98,13 @@ const FileSystem: React.FC = () => {
     if (!dispatch) return;
 
     const updatedFiles = files.filter((f: File) => f.id !== id);
-    dispatch({ type: 'xCodeCompiler/setFiles', payload: updatedFiles });
+    dispatch({ type: 'zenxbattle/setFiles', payload: updatedFiles });
 
     if (currentFile === id) {
       if (updatedFiles.length > 0) {
-        dispatch({ type: 'xCodeCompiler/setCurrentFile', payload: updatedFiles[0].id });
+        dispatch({ type: 'zenxbattle/setCurrentFile', payload: updatedFiles[0].id });
       } else {
-        dispatch({ type: 'xCodeCompiler/setCurrentFile', payload: null });
+        dispatch({ type: 'zenxbattle/setCurrentFile', payload: null });
       }
     }
   };
@@ -116,7 +116,7 @@ const FileSystem: React.FC = () => {
       setNewFileName(file.name);
       setIsRenaming(true);
       if (dispatch) {
-        dispatch({ type: 'xCodeCompiler/setCurrentFile', payload: id });
+        dispatch({ type: 'zenxbattle/setCurrentFile', payload: id });
       }
     }
   };
@@ -137,14 +137,14 @@ const FileSystem: React.FC = () => {
         : file
     );
 
-    dispatch({ type: 'xCodeCompiler/setFiles', payload: updatedFiles });
+    dispatch({ type: 'zenxbattle/setFiles', payload: updatedFiles });
     setIsRenaming(false);
   };
 
   // Set current file
   const setCurrentFileFn = (id: string) => {
     if (dispatch) {
-      dispatch({ type: 'xCodeCompiler/setCurrentFile', payload: id });
+      dispatch({ type: 'zenxbattle/setCurrentFile', payload: id });
     }
   };
 

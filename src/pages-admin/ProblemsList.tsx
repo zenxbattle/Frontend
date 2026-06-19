@@ -10,6 +10,7 @@ import { Filter, Plus, Loader2, FileCode, Search, Server } from "lucide-react";
 interface Problem {
   problemId: string;
   title: string;
+  slug: string;
   description: string;
   tags: string[];
   difficulty: string;
@@ -252,6 +253,9 @@ const ProblemListView: React.FC<ProblemListViewProps> = ({
                   </Badge>
                 </div>
                 <CardTitle className="text-lg text-gray-900 dark:text-gray-100 truncate">{problem.title}</CardTitle>
+                {problem.slug && (
+                  <p className="text-xs text-gray-500 dark:text-gray-500 font-mono mt-1 truncate">/{problem.slug}</p>
+                )}
               </CardHeader>
               <CardContent className="pb-2">
                 <div className="flex flex-wrap gap-1 mb-4">

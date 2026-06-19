@@ -17,8 +17,8 @@ interface OutputProps {
 }
 
 function Output({ className }: OutputProps) {
-  const { loading, result } = useSelector((state: RootState) => state.xCodeCompiler);
-  const { code, language } = useSelector((state: RootState) => state.xCodeCompiler);
+  const { loading, result } = useSelector((state: RootState) => state.zenxbattle);
+  const { code, language } = useSelector((state: RootState) => state.zenxbattle);
   const [copied, setCopied] = useState(false);
   const [isErrorExpanded, setIsErrorExpanded] = useState(false);
   const [hints, setHints] = useState<string | null>("");
