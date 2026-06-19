@@ -46,6 +46,9 @@ export const executeCode = async (code: string, language: string): Promise<Compi
     console.error("Error during request:", error);
 
     if (error.response) {
+      if (error.response.status === 429) {
+        return error.response.data as CompilerResponse;
+      }
       return {
         output: error.response.data?.output || "",
         status_message: error.response.data?.error || "An error occurred during execution.",
