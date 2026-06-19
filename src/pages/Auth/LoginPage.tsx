@@ -284,7 +284,10 @@ function LoginForm() {
               </Button>
             </form>
 
+            {!window.location.hostname.includes("internal") && (
             <div className="mt-4 text-center text-xs text-gray-400">OR</div>
+            )}
+            {!window.location.hostname.includes("internal") && (
             <div className="mt-4 space-y-2">
               <Button
                 type="button"
@@ -302,6 +305,7 @@ function LoginForm() {
                 Login with Github
               </Button> */}
             </div>
+            )}
 
             <div className="mt-4 text-center text-sm text-gray-400 flex">
               {loading ? (
